@@ -47,9 +47,11 @@ export const MessageContent = ({
 }: MessageContentProps) => (
   <div
     className={cn(
-      "is-user:dark flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-hidden text-sm",
-      "group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:bg-secondary group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground",
-      "group-[.is-assistant]:text-foreground",
+      "flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-hidden text-sm",
+      // User messages: right-aligned glass bubbles with purple neon outline
+      "group-[.is-user]:ml-auto group-[.is-user]:glass-card group-[.is-user]:neon-outline group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-white group-[.is-user]:rounded-2xl group-[.is-user]:backdrop-blur-xl",
+      // Assistant messages: left-aligned with soft violet glow
+      "group-[.is-assistant]:violet-glow group-[.is-assistant]:glass-card group-[.is-assistant]:px-4 group-[.is-assistant]:py-3 group-[.is-assistant]:text-white group-[.is-assistant]:rounded-2xl group-[.is-assistant]:backdrop-blur-xl",
       className
     )}
     {...props}

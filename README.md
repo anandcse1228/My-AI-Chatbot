@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## About
 
-## Getting Started
+A beginner-friendly AI chatbot project using Gemini 2.5 Flash via AI SDK. Built as a learning exercise to explore frontend-backend streaming AI responses, custom prompts, and UX improvements.
 
-First, run the development server:
+Gemini Chatbot 💬
 
-```bash
+Hi there! 👋 I built this AI chatbot as a learning project using Gemini 2.5 Flash via the AI SDK.
+
+I wanted to experiment with streaming AI responses, see how sources and reasoning can be displayed, and get some hands-on practice connecting a React frontend to a backend AI API. It’s not production-ready, but it’s a fun way to learn and explore AI development.
+
+🚀 What it does
+
+Sends messages to Gemini 2.5 Flash and streams the responses in real time
+
+Shows sources and reasoning for the AI’s answers
+
+Lets you send attachments in messages
+
+UX-friendly: shows a welcome message when chat is empty, and alerts you if you try to send an empty message
+
+Includes retry and copy buttons for AI responses
+
+🛠️ Tech I used
+
+Frontend: React + AI SDK UI components
+
+Backend: Node.js + AI SDK streaming API
+
+AI model: Gemini 2.5 Flash
+
+Icons/UI: Lucide Icons
+
+⚡ How to run it
+
+Clone the repo
+
+git clone https://github.com/yourusername/gemini-chatbot.git
+cd gemini-chatbot
+
+
+Install dependencies
+
+npm install
+# or
+yarn install
+
+
+Add your Gemini API key
+Create a .env file in the root:
+
+AI_API_KEY=your_free_gemini_api_key_here
+
+
+Start the app
+
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open http://localhost:3000
+ and start chatting!
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+💡 How I adapted this project
 
-## Learn More
+I started with the AI SDK examples and made it my own by:
 
-To learn more about Next.js, take a look at the following resources:
+Customizing the system prompt to make the assistant more helpful
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Aligning frontend & backend so only Gemini 2.5 Flash is used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Adding UX improvements, like a welcome message and input validation
 
-## Deploy on Vercel
+Adding error handling and comments to show understanding
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Removing extra features I wasn’t using, keeping it clean and simple
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+📚 What I learned
+
+How to stream AI responses from backend to frontend
+
+How to handle multiple message types: text, sources, reasoning
+
+How to make a small but usable chat UI using React + AI SDK components
+
+The importance of honest, maintainable code (even if starting from examples!)
+
