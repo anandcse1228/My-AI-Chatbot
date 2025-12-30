@@ -146,9 +146,10 @@ const GeminiChatbot = () => {
                       <span className="text-white font-bold text-2xl">AI</span>
                     </div>
                   </div>
-                  <p className="text-2xl font-bold text-white mb-2">Welcome to NEXUS AI</p>
+                  <p className="text-2xl font-bold text-white mb-2">Welcome to TAPSS AI</p>
                   <p className="text-white/60">
-                    Ask me anything and I'll respond using advanced AI technology.
+                    <p>TAPSS stands for Technology Assisted Personalized Student Support which is made with ❤️ by Thakur Anand Pratap Singh Suryavanshi.</p>
+                    <p>Ask me anything and I'll respond using advanced AI technology.</p>
                   </p>
                 </div>
               )}
