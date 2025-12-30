@@ -67,6 +67,7 @@ const GeminiChatbot = () => {
       {
         body: {
           webSearch: webSearch,
+          model: selectedModel,
         },
       },
     );
@@ -100,8 +101,19 @@ const GeminiChatbot = () => {
               className="w-full glass px-3 py-2 rounded-lg text-white border border-purple-500/30 focus:neon-glow focus:outline-none"
             >
               <option value="Gemini 2.5 Flash">Gemini 2.5 Flash</option>
-              <option value="GPT-4">GPT-4</option>
-              <option value="Claude 3">Claude 3</option>
+              <optgroup label="OpenRouter Models">
+                <option value="openrouter/allenai/olmo-3.1-32b-think:free">AllenAI OLMo 3.1 32B Think (Free)</option>
+                <option value="openrouter/xiaomi/mimo-v2-flash:free">Xiaomi MiMo v2 Flash (Free)</option>
+                <option value="openrouter/nvidia/nemotron-3-nano-30b-a3b:free">NVIDIA Nemotron 3 Nano 30B A3B (Free)</option>
+                <option value="openrouter/mistralai/devstral-2512:free">MistralAI Devstral 2512 (Free)</option>
+                <option value="openrouter/nex-agi/deepseek-v3.1-nex-n1:free">NexAGI DeepSeek v3.1 Nex N1 (Free)</option>
+                <option value="openrouter/kwaipilot/kat-coder-pro:free">KwaiPilot Kat Coder Pro (Free)</option>
+                <option value="openrouter/openai/gpt-oss-120b:free">OpenAI GPT OSS 120B (Free)</option>
+                <option value="openrouter/z-ai/glm-4.5-air:free">Z-AI GLM 4.5 Air (Free)</option>
+                <option value="openrouter/qwen/qwen3-coder:free">Qwen Qwen3 Coder (Free)</option>
+                <option value="openrouter/cognitivecomputations/dolphin-mistral-24b-venice-edition:free">CognitiveComputations Dolphin Mistral 24B Venice (Free)</option>
+                <option value="openrouter/qwen/qwen3-4b:free">Qwen Qwen3 4B (Free)</option>
+              </optgroup>
             </select>
           </div>
         </div>

@@ -8,3 +8,13 @@
 - [ ] Add typing dots animation
 - [ ] Add pulsing "AI Online" indicator
 - [ ] Test responsiveness and animations
+
+# Add OpenRouter Integration
+
+## Tasks
+- [x] Install @ai-sdk/openai-compatible package
+- [x] Update app/api/chat/route.ts to support multiple model providers
+- [x] Update app/page.tsx to include OpenRouter models in selector
+- [ ] Create .env file with OPENROUTER_API_KEY
+- [x] Update README.md to document OpenRouter addition
+- [x] Test model switching functionality

@@ -1,15 +1,23 @@
 import { streamText, UIMessage, convertToModelMessages } from 'ai';
 import { google } from '@ai-sdk/google';
+import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
+
+// Create OpenRouter provider
+const openrouter = createOpenAICompatible({
+  name: 'openrouter',
+  apiKey: process.env.OPENROUTER_API_KEY,
+  baseURL: 'https://openrouter.ai/api/v1',
+});
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
   try {
-    // Parse messages sent from the frontend
-    const { messages }: { messages: UIMessage[] } = await req.json();
+    // Parse messages and model selection from the frontend
+    const { messages, model }: { messages: UIMessage[]; model: string } = await req.json();
 
-    // Basic validation (not in the original example)
+    // Basic validation
     if (!messages || messages.length === 0) {
       return new Response(
         JSON.stringify({ error: 'No messages provided' }),
@@ -17,9 +25,19 @@ export async function POST(req: Request) {
       );
     }
 
-    // Call Gemini 2.5 Flash using AI SDK
+    // Determine which model provider to use based on the model ID
+    let selectedModel;
+    if (model.startsWith('openrouter/')) {
+      // OpenRouter models use OpenAI-compatible provider
+      selectedModel = openrouter(model.replace('openrouter/', ''));
+    } else {
+      // Default to Gemini for backward compatibility
+      selectedModel = google('gemini-2.5-flash');
+    }
+
+    // Call the selected AI model using AI SDK
     const result = streamText({
-      model: google('gemini-2.5-flash'),
+      model: selectedModel,
 
       // Custom system prompt (this makes it YOUR chatbot)
       system: `
