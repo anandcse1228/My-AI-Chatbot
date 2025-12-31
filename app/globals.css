@@ -127,37 +127,42 @@
 /* Futuristic Glassmorphism and Neon Effects */
 @layer utilities {
   .glass {
-    backdrop-filter: blur(20px);
-    background: rgba(155, 92, 255, 0.1);
-    border: 1px solid rgba(155, 92, 255, 0.3);
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    background: linear-gradient(135deg, rgba(155,92,255,0.06), rgba(10,6,20,0.4)) !important;
+    border: 1px solid rgba(155, 92, 255, 0.3) !important;
+    box-shadow: 0 8px 32px rgba(155, 92, 255, 0.12) !important;
+    color: var(--color-foreground) !important;
   }
 
   .glass-card {
-    backdrop-filter: blur(20px);
-    background: rgba(5, 5, 5, 0.8);
-    border: 1px solid rgba(155, 92, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(155, 92, 255, 0.1);
+    backdrop-filter: blur(28px) !important;
+    -webkit-backdrop-filter: blur(28px) !important;
+    background: linear-gradient(180deg, rgba(11,2,24,0.9), rgba(43,10,77,0.85)) !important;
+    border: 1px solid var(--color-border) !important;
+    box-shadow: 0 12px 48px rgba(9,6,30,0.6) !important;
+    color: var(--color-card-foreground) !important;
   }
 
   .neon-glow {
-    box-shadow: 0 0 20px rgba(155, 92, 255, 0.5), 0 0 40px rgba(155, 92, 255, 0.3);
+    box-shadow: 0 0 20px rgba(155, 92, 255, 0.5), 0 0 40px rgba(155, 92, 255, 0.3) !important;
   }
 
   .neon-outline {
-    border: 1px solid #9b5cff;
-    box-shadow: 0 0 10px rgba(155, 92, 255, 0.5);
+    border: 1px solid #9b5cff !important;
+    box-shadow: 0 0 10px rgba(155, 92, 255, 0.5) !important;
   }
 
   .violet-glow {
-    box-shadow: 0 0 15px rgba(90, 44, 255, 0.4);
+    box-shadow: 0 0 15px rgba(90, 44, 255, 0.4) !important;
   }
 
   .gradient-bg {
-    background: linear-gradient(135deg, #050505 0%, #1a0a2e 50%, #050505 100%);
+    background: linear-gradient(135deg, #050505 0%, #1a0a2e 50%, #050505 100%) !important;
   }
 
   .purple-gradient {
-    background: linear-gradient(135deg, #9b5cff 0%, #5a2cff 50%, #9b5cff 100%);
+    background: linear-gradient(135deg, #9b5cff 0%, #5a2cff 50%, #9b5cff 100%) !important;
   }
 
   .animate-fade-in {
@@ -209,4 +214,67 @@
   30% {
     transform: translateY(-10px);
   }
+}
+
+/* Strong dark-mode overrides to prevent white background leaks */
+html.dark [data-radix-popper-content-wrapper],
+html.dark [data-slot="command"],
+html.dark [data-slot="dialog-content"],
+html.dark [data-slot="popover-content"],
+html.dark [data-radix-portal] > *,
+html.dark .radix-portal,
+html.dark .radix-dialog-content,
+html.dark .radix-dialog-overlay {
+  background: transparent !important;
+  color: var(--color-foreground) !important;
+}
+
+/* Dialog overlay: consistent dark translucent with blur */
+html.dark [data-slot="dialog-overlay"],
+html.dark [data-radix-dialog-overlay],
+html.dark .radix-dialog-overlay {
+  background: rgba(0,0,0,0.6) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
+/* Dialog content & popovers: glass-card by default */
+html.dark [data-slot="dialog-content"],
+html.dark [data-radix-dialog-content],
+html.dark .radix-dialog-content,
+html.dark [data-slot="popover-content"],
+html.dark [data-radix-popper-content-wrapper] {
+  background: linear-gradient(180deg, rgba(11,2,24,0.9), rgba(43,10,77,0.85)) !important;
+  color: var(--color-popover-foreground) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+}
+
+/* Command / cmdk controls */
+html.dark [data-slot="command-input-wrapper"] {
+  border-bottom: 1px solid var(--color-border) !important;
+  background: transparent !important;
+}
+
+html.dark [data-slot="command-list"],
+html.dark [data-slot="command"],
+html.dark .cmdk,
+html.dark .cmdk-list,
+html.dark .cmdk-item {
+  background: transparent !important;
+  color: var(--color-foreground) !important;
+}
+
+/* Ensure portal children inherit dark glass */
+html.dark [data-radix-portal] > * {
+  background: linear-gradient(180deg, rgba(11,2,24,0.9), rgba(43,10,77,0.85)) !important;
+  color: var(--color-foreground) !important;
+}
+
+/* Fallback: ensure body and root don't flash white */
+html.dark, html.dark body, html.dark #__next {
+  background: var(--color-background) !important;
+  color: var(--color-foreground) !important;
 }

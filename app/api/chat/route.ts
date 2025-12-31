@@ -62,8 +62,9 @@ export async function POST(req: Request) {
     // Check if web search is enabled and perform search on the last user message
     const lastMessage = messages[messages.length - 1];
     let searchResults = '';
-    if (webSearch && lastMessage.role === 'user' && typeof lastMessage.content === 'string') {
-      searchResults = await performWebSearch(lastMessage.content);
+    const messageContent = (lastMessage as any).content || (lastMessage as any).text;
+    if (webSearch && lastMessage.role === 'user' && typeof messageContent === 'string') {
+      searchResults = await performWebSearch(messageContent);
     }
 
     // Prepare messages with search results if available
@@ -71,7 +72,7 @@ export async function POST(req: Request) {
     if (searchResults) {
       processedMessages = [
         ...messages,
-        { role: 'system', content: searchResults } as UIMessage
+        { role: 'system', content: searchResults, id: 'system-search', parts: [{ type: 'text', text: searchResults }] } as UIMessage
       ];
     }
 

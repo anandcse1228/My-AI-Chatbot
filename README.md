@@ -1,8 +1,16 @@
-# AI Chatbot 
+# AI Chatbot with Gemini 2.5 Flash
 
-A modern, responsive AI chatbot built with Next.js, React, and the AI SDK, powered by Google's Gemini 2.5 Flash model,allen ai,xiaomi,nvidia,mistral ai,nex agi,kwaipilot,openai,z-ai,qwen,cognitivecomputations. This project demonstrates real-time streaming AI responses, advanced UI components, and mobile-first design principles.
+A modern, responsive AI chatbot built with Next.js, React, and the AI SDK, powered by Google's Gemini 2.5 Flash model. This project demonstrates real-time streaming AI responses, advanced UI components, and mobile-first design principles.
+=======
+# AI Chatbot with Gemini 2.5 Flash
 
-## 🚀 Features
+A modern, responsive AI chatbot built with Next.js, React, and the AI SDK, powered by Google's Gemini 2.5 Flash model. This project demonstrates real-time streaming AI responses, advanced UI components, and mobile-first design principles.
+=======
+# AI Chatbot with Gemini 2.5 Flash
+
+A modern, responsive AI chatbot built with Next.js, React, and the AI SDK, powered by Google's Gemini 2.5 Flash model. This project demonstrates real-time streaming AI responses, advanced UI components, and mobile-first design principles.
+>>>>>>> 9f665d2 (Update README with detailed project documentation)
+ 🚀 Features
 
 ### Core Functionality
 - **Real-time Streaming**: Instant AI responses streamed from Gemini 2.5 Flash

@@ -29,9 +29,21 @@ import {
   PromptInputTools,
   PromptInputSpeechButton,
 } from '@/components/ai-elements/prompt-input';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { useChat } from '@ai-sdk/react';
-import { CopyIcon, GlobeIcon, RefreshCcwIcon } from 'lucide-react';
+import { CopyIcon, GlobeIcon, RefreshCcwIcon, ChevronDownIcon } from 'lucide-react';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui';
+import { Button } from '@/components/ui';
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectGroup,
+  SelectLabel,
+  SelectSeparator,
+  SelectValue,
+} from '@/components/ui';
 import {
   Source,
   Sources,
@@ -45,13 +57,76 @@ import {
 } from '@/components/ai-elements/reasoning';
 import { Loader } from '@/components/ai-elements/loader';
 
+interface ConversationData {
+  id: string;
+  title: string;
+  messages: ReturnType<typeof useChat>['messages'];
+}
+
 const GeminiChatbot = () => {
   const [input, setInput] = useState('');
   const [webSearch, setWebSearch] = useState(false);
   const [selectedModel, setSelectedModel] = useState('Gemini 2.5 Flash');
   const [conversations, setConversations] = useState<ConversationData[]>([]);
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
+  const [modelsLoading, setModelsLoading] = useState(false);
+  const [modelsError, setModelsError] = useState<string | null>(null);
+  const [models, setModels] = useState<{ id: string; name: string; provider: string }[]>([]);
+  const [openRouterAvailable, setOpenRouterAvailable] = useState(false);
   const { messages, sendMessage, status, regenerate } = useChat();
+
+  
+  const FALLBACK_MODELS: { id: string; name: string; provider: string }[] = [
+    { id: 'Gemini 2.5 Flash', name: 'Gemini 2.5 Flash', provider: 'google' },
+    { id: 'openrouter/allenai/olmo-3.1-32b-think:free', name: 'AllenAI OLMo 3.1 32B Think', provider: 'openrouter' },
+    { id: 'openrouter/xiaomi/mimo-v2-flash:free', name: 'Xiaomi MiMo v2 Flash', provider: 'openrouter' },
+    { id: 'openrouter/nvidia/nemotron-3-nano-30b-a3b:free', name: 'NVIDIA Nemotron 3 Nano 30B A3B', provider: 'openrouter' },
+    { id: 'openrouter/mistralai/devstral-2512:free', name: 'MistralAI Devstral 2512', provider: 'openrouter' },
+    { id: 'openrouter/nex-agi/deepseek-v3.1-nex-n1:free', name: 'NexAGI DeepSeek v3.1 Nex N1', provider: 'openrouter' },
+    { id: 'openrouter/kwaipilot/kat-coder-pro:free', name: 'KwaiPilot Kat Coder Pro', provider: 'openrouter' },
+    { id: 'openrouter/openai/gpt-oss-120b:free', name: 'OpenAI GPT OSS 120B', provider: 'openrouter' },
+    { id: 'openrouter/z-ai/glm-4.5-air:free', name: 'Z-AI GLM 4.5 Air', provider: 'openrouter' },
+    { id: 'openrouter/qwen/qwen3-coder:free', name: 'Qwen Qwen3 Coder', provider: 'openrouter' },
+    { id: 'openrouter/cognitivecomputations/dolphin-mistral-24b-venice-edition:free', name: 'Dolphin Mistral 24B Venice', provider: 'openrouter' },
+    { id: 'openrouter/qwen/qwen3-4b:free', name: 'Qwen Qwen3 4B', provider: 'openrouter' },
+  ];
+
+  const displayModels = models.length > 0 ? models : FALLBACK_MODELS;
+
+  const loadModels = async () => {
+    setModelsLoading(true);
+    setModelsError(null);
+    try {
+      // Simulate loading models. In real app, fetch from API.
+      const geminiModels = [
+        { id: 'Gemini 2.5 Flash', name: 'Gemini 2.5 Flash', provider: 'google' },
+      ];
+      const openRouterModels = [
+        { id: 'openrouter/allenai/olmo-3.1-32b-think:free', name: 'AllenAI OLMo 3.1 32B Think', provider: 'openrouter' },
+        { id: 'openrouter/xiaomi/mimo-v2-flash:free', name: 'Xiaomi MiMo v2 Flash', provider: 'openrouter' },
+        { id: 'openrouter/nvidia/nemotron-3-nano-30b-a3b:free', name: 'NVIDIA Nemotron 3 Nano 30B A3B', provider: 'openrouter' },
+        { id: 'openrouter/mistralai/devstral-2512:free', name: 'MistralAI Devstral 2512', provider: 'openrouter' },
+        { id: 'openrouter/nex-agi/deepseek-v3.1-nex-n1:free', name: 'NexAGI DeepSeek v3.1 Nex N1', provider: 'openrouter' },
+        { id: 'openrouter/kwaipilot/kat-coder-pro:free', name: 'KwaiPilot Kat Coder Pro', provider: 'openrouter' },
+        { id: 'openrouter/openai/gpt-oss-120b:free', name: 'OpenAI GPT OSS 120B', provider: 'openrouter' },
+        { id: 'openrouter/z-ai/glm-4.5-air:free', name: 'Z-AI GLM 4.5 Air', provider: 'openrouter' },
+        { id: 'openrouter/qwen/qwen3-coder:free', name: 'Qwen Qwen3 Coder', provider: 'openrouter' },
+        { id: 'openrouter/cognitivecomputations/dolphin-mistral-24b-venice-edition:free', name: 'Dolphin Mistral 24B Venice', provider: 'openrouter' },
+        { id: 'openrouter/qwen/qwen3-4b:free', name: 'Qwen Qwen3 4B', provider: 'openrouter' },
+      ];
+      setModels([...geminiModels, ...openRouterModels]);
+      setOpenRouterAvailable(true);
+    } catch (error) {
+      setModelsError('Failed to load models');
+      setOpenRouterAvailable(false);
+    } finally {
+      setModelsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadModels();
+  }, []);
 
   const handleSubmit = (message: PromptInputMessage) => {
     const hasText = Boolean(message.text);
@@ -85,26 +160,73 @@ const GeminiChatbot = () => {
         <div className="p-6 border-b border-purple-500/20">
           <div className="space-y-2">
             <label className="text-white/70 text-sm font-medium">AI Model</label>
-            <select
-              value={selectedModel}
-              onChange={(e) => setSelectedModel(e.target.value)}
-              className="w-full glass px-3 py-2 rounded-lg text-white border border-purple-500/30 focus:neon-glow focus:outline-none"
-            >
-              <option value="Gemini 2.5 Flash">Gemini 2.5 Flash</option>
-              <optgroup label="OpenRouter Models">
-                <option value="openrouter/allenai/olmo-3.1-32b-think:free">AllenAI OLMo 3.1 32B Think (Free)</option>
-                <option value="openrouter/xiaomi/mimo-v2-flash:free">Xiaomi MiMo v2 Flash (Free)</option>
-                <option value="openrouter/nvidia/nemotron-3-nano-30b-a3b:free">NVIDIA Nemotron 3 Nano 30B A3B (Free)</option>
-                <option value="openrouter/mistralai/devstral-2512:free">MistralAI Devstral 2512 (Free)</option>
-                <option value="openrouter/nex-agi/deepseek-v3.1-nex-n1:free">NexAGI DeepSeek v3.1 Nex N1 (Free)</option>
-                <option value="openrouter/kwaipilot/kat-coder-pro:free">KwaiPilot Kat Coder Pro (Free)</option>
-                <option value="openrouter/openai/gpt-oss-120b:free">OpenAI GPT OSS 120B (Free)</option>
-                <option value="openrouter/z-ai/glm-4.5-air:free">Z-AI GLM 4.5 Air (Free)</option>
-                <option value="openrouter/qwen/qwen3-coder:free">Qwen Qwen3 Coder (Free)</option>
-                <option value="openrouter/cognitivecomputations/dolphin-mistral-24b-venice-edition:free">CognitiveComputations Dolphin Mistral 24B Venice (Free)</option>
-                <option value="openrouter/qwen/qwen3-4b:free">Qwen Qwen3 4B (Free)</option>
-              </optgroup>
-            </select>
+            <Select value={selectedModel} onValueChange={(v) => setSelectedModel(v)}>
+              <SelectTrigger className="w-full glass px-3 py-2 rounded-lg text-white border border-purple-500/30 focus:neon-glow focus:outline-none">
+                <SelectValue placeholder={selectedModel ?? 'Select model'} />
+              </SelectTrigger>
+
+              <SelectContent className="glass bg-[rgba(255,255,255,0.04)]/40 border border-purple-500/20 backdrop-blur-md text-white">
+                <SelectGroup>
+                  <SelectLabel>Default</SelectLabel>
+                  {displayModels
+                    .filter((m) => m.provider === 'google')
+                    .map((m) => (
+                      <SelectItem key={m.id} value={m.id}>
+                        {m.name.replace(/\s*\(Free\)$/, '')}
+                      </SelectItem>
+                    ))}
+
+                  <SelectSeparator />
+
+                  <SelectLabel>OpenRouter Models</SelectLabel>
+                  {displayModels
+                    .filter((m) => m.provider !== 'google')
+                    .map((m) => (
+                      <SelectItem key={m.id} value={m.id}>
+                        {m.name.replace(/\s*\(Free\)$/, '')}
+                      </SelectItem>
+                    ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+
+            <div className="mt-3">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" className="w-full text-sm text-white/80 glass border border-purple-500/10">View all models</Button>
+                </DialogTrigger>
+
+                <DialogContent className="max-h-[60vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle className="text-white">Available Models</DialogTitle>
+                  </DialogHeader>
+
+                  <div className="grid gap-2 mt-3">
+                    {displayModels.map((m) => (
+                      <button
+                        key={m.id}
+                        onClick={() => setSelectedModel(m.id)}
+                        className="text-left glass p-3 rounded-md hover:neon-glow"
+                        type="button"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-medium text-white">{m.name.replace(/\s*\(Free\)$/, '')}</div>
+                            <div className="text-xs text-white/60">{m.provider}</div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+
+                  <DialogFooter className="mt-4">
+                    <DialogClose asChild>
+                      <Button variant="ghost">Close</Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </div>
 
@@ -147,10 +269,10 @@ const GeminiChatbot = () => {
                     </div>
                   </div>
                   <p className="text-2xl font-bold text-white mb-2">Welcome to TAPSS AI</p>
-                  <p className="text-white/60">
+                  <div className="text-white/60">
                     <p>TAPSS stands for Technology Assisted Personalized Student Support which is made with ❤️ by Thakur Anand Pratap Singh Suryavanshi.</p>
                     <p>Ask me anything and I'll respond using advanced AI technology.</p>
-                  </p>
+                  </div>
                 </div>
               )}
 
